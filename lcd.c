@@ -5,6 +5,8 @@
  *  Author: itsLydt
  */ 
 
+#include "ATSAMD21/drivers/gpio/gpio.h"
+
 void LCD_Init(){
 	// configure GPIO pins that will be used to control the display
 }
