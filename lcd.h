@@ -11,18 +11,13 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-extern const PortGroup* const CTRL_PORT;
-extern const uint8_t PIN_RS;
-extern const uint8_t PIN_RW;
-extern const uint8_t PIN_E;
-
-extern const PortGroup* const DATA_PORT;
-extern const uint8_t PIN_DB0;
+#include "ATSAMD21/drivers/gpio/gpio.h"
+#include "delay.h"
 
 //init LCD
 void LCD_Init();
 
-
-
+void FillWith(uint8_t val);
+void Clear();
 
 #endif /* LCD_H_ */
