@@ -11,7 +11,8 @@
 
 int main(void)
 {
-    /* Replace with your application code */
+	LCD_Init();
+
     while (1) 
     {
     }
