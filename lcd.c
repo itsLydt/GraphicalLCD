@@ -6,5 +6,5 @@
  */ 
 
 void LCD_Init(){
-	
+	// configure GPIO pins that will be used to control the display
 }

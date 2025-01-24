@@ -143,6 +143,14 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ATSAMD21\drivers\gpio\gpio.c">
+      <SubType>compile</SubType>
+      <Link>gpio.c</Link>
+    </Compile>
+    <Compile Include="ATSAMD21\drivers\gpio\gpio.h">
+      <SubType>compile</SubType>
+      <Link>gpio.h</Link>
+    </Compile>
     <Compile Include="Device_Startup\startup_samd21.c">
       <SubType>compile</SubType>
     </Compile>
