@@ -7,6 +7,9 @@
 
 
 #include "sam.h"
+#include "config.h"
+#include "lcd.h"
+
 
 void TRAN_Init();
 
@@ -17,6 +20,10 @@ int main(void)
 
     while (1) 
     {
+		FillWith(0xFF);
+		delay_ms(500);
+		Clear();
+		delay_ms(500);
     }
 }
 

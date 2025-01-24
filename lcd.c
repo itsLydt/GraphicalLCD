@@ -6,10 +6,11 @@
  */ 
 
 #include "lcd.h"
-#include "ATSAMD21/drivers/gpio/gpio.h"
+#include "config.h"
+#include "delay.h"
 
 const uint8_t DB_MASK = 0xFF;
-const uint8_t CTRL_MASK = (1 << PIN_RS) | (1 << PIN_RW) | (1 << PIN_E);
+#define CTRL_MASK ((1 << PIN_RS) | (1 << PIN_RW) | (1 << PIN_E))
 
 void write_command(uint8_t cmd);
 
@@ -33,7 +34,42 @@ void write_command(uint8_t cmd){
 	GPIO_WriteValue(DATA_PORT, DB_MASK << PIN_DB0, cmd);	// write command data bus
 	
 	// hold data / E signal for 150ns
-	//delay_ns(150);
+	delay_ns(150);
 	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
-	//delay_ns(20);	
+	delay_ns(20);	
+}
+
+void write_data(uint8_t data){
+	
+	GPIO_WritePin(CTRL_PORT, PIN_RS, 0);			// RS = 1
+	GPIO_WritePin(CTRL_PORT, PIN_RW, 1);			// Write; RW = 0
+	GPIO_WritePin(CTRL_PORT, PIN_E, 0);				// E = 1
+	GPIO_WriteValue(DATA_PORT, DB_MASK << PIN_DB0, data);	// write command data bus
+	
+	// hold data / E signal for 150ns
+	delay_ns(150);
+	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
+	delay_ns(20);
+}
+
+
+
+void Clear()
+{
+	FillWith(0);
+}
+
+void FillWith(uint8_t val)
+{
+	unsigned int x, page;
+	for (page=0x80;page<0xA1;page++)
+	{
+		write_command(0x3E);
+		write_command(page);
+		write_command(0x80);
+		for (x=0;x<18;x++)
+		{
+			write_data(val);
+		}
+	}
 }
