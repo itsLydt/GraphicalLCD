@@ -7,9 +7,10 @@
 
 
 #include "sam.h"
-#include "config.h"
 #include "lcd.h"
 
+#define CONFIG_IMPL
+#include "config.h"
 
 void TRAN_Init();
 
