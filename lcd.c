@@ -21,9 +21,9 @@ void LCD_Init(){
 	
 	write_command(0x38);        //Function Set: 8-bit mode, basic instruction
 	write_command(0x0C);        //Display control: Display on, cursor off, blink off
-	write_command(0x06);		//Entry mode set
-	write_command(0x02);		//Return home
-	write_command(0x01);        //Display Clear
+	SetEntryMode(1, 0);			// Cursor increment, no shift
+	ReturnHome();
+	ClearDisplay();
 }
 
 void write_command(uint8_t cmd){
@@ -52,16 +52,32 @@ void write_data(uint8_t data){
 	delay_ns(20);
 }
 
+void ClearDisplay() {
+	write_command(0x01);
+	delay_us(1600);		// command takes 1.6ms to execute
+}
 
+void ReturnHome(){
+	write_command(0x02);
+	delay_us(72);		// command takes 72 us
+}
 
-void Clear()
-{
-	FillWith(0);
+void SetEntryMode(_Bool cursor_increment, _Bool shift_display){
+	uint8_t cmd = 0x04;
+	if(cursor_increment){
+		cmd |= 0x02;
+	}
+	if(shift_display){
+		cmd |= 0x01;
+	}
+	write_command(cmd);
+	delay_us(72);
 }
 
 void FillWith(uint8_t val)
 {
 	unsigned int x, page;
+	ReturnHome();
 	for (page=0x80;page<0xA1;page++)
 	{
 		write_command(0x3E);

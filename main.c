@@ -23,7 +23,11 @@ int main(void)
     {
 		FillWith(0xFF);
 		delay_ms(500);
-		Clear();
+		ClearDisplay();
+		delay_ms(500);
+		FillWith(0x0A);
+		delay_ms(500);
+		ClearDisplay();
 		delay_ms(500);
     }
 }

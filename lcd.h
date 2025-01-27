@@ -18,6 +18,13 @@
 void LCD_Init();
 
 void FillWith(uint8_t val);
-void Clear();
+
+/* Fill DDRAM with "20H" and set DDRAM address counter (AC) to "00H" */
+void ClearDisplay();
+/* Set AC to "00H" and put cursor at origin. Contents of DDRAM are unchanged. */
+void ReturnHome();
+/* Set Entry Mode */
+void SetEntryMode(_Bool cursor_increment, _Bool shift_display);
+
 
 #endif /* LCD_H_ */
