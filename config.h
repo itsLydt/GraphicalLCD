@@ -28,7 +28,7 @@ const uint8_t PIN_DB0;	// DB pins are assumed to be consecutive
 PortGroup* const TRAN_PORT;
 // remember that these signals are inverted by the NPN circuit
 #define PIN_DIR 9
-#define PIN_ENABLE 9
+#define PIN_ENABLE 8
 
 /* implementation of configurable items, this section is activated by main.c */
 #ifdef CONFIG_IMPL
