@@ -25,6 +25,10 @@ void ClearDisplay();
 void ReturnHome();
 /* Set Entry Mode */
 void SetEntryMode(_Bool cursor_increment, _Bool shift_display);
+/* Set Display Mode: display on/off, cursor on/off, character blink on/off */
+void SetDisplayMode(_Bool enable_display, _Bool enable_cursor, _Bool enable_blink);
 
+void Smile();
+void CountingPattern();
 
 #endif /* LCD_H_ */

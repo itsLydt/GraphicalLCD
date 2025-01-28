@@ -16,6 +16,9 @@ void TRAN_Init();
 
 int main(void)
 {
+	// wait for LCD to power on 
+	delay_ms(5000);
+	
 	TRAN_Init();
 	LCD_Init();
 
@@ -25,7 +28,7 @@ int main(void)
 		delay_ms(500);
 		ClearDisplay();
 		delay_ms(500);
-		FillWith(0x0A);
+		Smile();
 		delay_ms(500);
 		ClearDisplay();
 		delay_ms(500);

@@ -20,7 +20,7 @@ void LCD_Init(){
 	GPIO_SetPortDirection(CTRL_PORT, CTRL_MASK, GPIO_OUT);
 	
 	write_command(0x38);        //Function Set: 8-bit mode, basic instruction
-	write_command(0x0C);        //Display control: Display on, cursor off, blink off
+	SetDisplayMode(1, 0, 0);	// Display on, cursor off, blink off
 	SetEntryMode(1, 0);			// Cursor increment, no shift
 	ReturnHome();
 	ClearDisplay();
@@ -49,7 +49,7 @@ void write_data(uint8_t data){
 	// hold data / E signal for 150ns
 	delay_ns(150);
 	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
-	delay_ns(20);
+	delay_us(72);
 }
 
 void ClearDisplay() {
@@ -64,13 +64,18 @@ void ReturnHome(){
 
 void SetEntryMode(_Bool cursor_increment, _Bool shift_display){
 	uint8_t cmd = 0x04;
-	if(cursor_increment){
-		cmd |= 0x02;
-	}
-	if(shift_display){
-		cmd |= 0x01;
-	}
+	cmd |= (cursor_increment << 1);
+	cmd |= (shift_display);
 	write_command(cmd);
+	delay_us(72);
+}
+
+/* Set Display Mode: display on/off, cursor on/off, character blink on/off */
+void SetDisplayMode(_Bool enable_display, _Bool enable_cursor, _Bool enable_blink){
+	uint8_t cmd = 0x08;
+	cmd |= (enable_display << 2);
+	cmd |= (enable_cursor << 1);
+	cmd |= (enable_blink);
 	delay_us(72);
 }
 
@@ -86,6 +91,50 @@ void FillWith(uint8_t val)
 		for (x=0;x<18;x++)
 		{
 			write_data(val);
+		}
+	}
+}
+
+void FillRowWith(uint8_t row, uint8_t val){
+	write_command(0x3E);
+	delay_us(72);
+	write_command(row);	// write vertical address
+	delay_us(72);
+	write_command(0x80);	// write horizontal address
+	delay_us(72);
+	for (int x = 0;x<18;x++)
+	{
+		write_data(val);
+	}
+}
+
+void Smile(){
+	unsigned int page = 0x80;
+	for (int i = 0; i < 5; i++)
+	{
+		FillRowWith(page++, 0x00);
+		FillRowWith(page++, 0x24);
+		FillRowWith(page++, 0x00);
+		FillRowWith(page++, 0x42);
+		FillRowWith(page++, 0x3C);
+		FillRowWith(page++, 0x00);
+	}
+	
+	FillRowWith(page++, 0x00);
+	FillRowWith(page++, 0x00);
+}
+
+void CountingPattern(){
+	for (uint8_t page = 0x80; page<0xA1; page++){
+		write_command(0x3E);
+		delay_us(72);
+		write_command(page);
+		delay_us(72);
+		write_command(0x80);
+		delay_us(72);
+
+		for(int x = 0; x < 18; x++){
+			write_data(x);
 		}
 	}
 }
