@@ -28,7 +28,13 @@ void SetEntryMode(_Bool cursor_increment, _Bool shift_display);
 /* Set Display Mode: display on/off, cursor on/off, character blink on/off */
 void SetDisplayMode(_Bool enable_display, _Bool enable_cursor, _Bool enable_blink);
 
+void SetGDRAMAddr(uint8_t row, uint8_t col);
+/* not clear what this does */
+void SetDDRAMAddr(uint8_t addr);
+void write_data(uint8_t data);
 void Smile();
-void CountingPattern();
+void Aww();
+
+void DrawChar(char c);
 
 #endif /* LCD_H_ */
