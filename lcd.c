@@ -175,12 +175,7 @@ void Aww(){
 
 _Bool isBusy(){
 	// assume port settings have been changed appropriately
-	GPIO_WritePin(CTRL_PORT, PIN_RS, 1);			// RS = 0
-	GPIO_WritePin(CTRL_PORT, PIN_RW, 0);			// Read; RW = 1
-	GPIO_WritePin(CTRL_PORT, PIN_E, 0);				// E = 1
-	delay_ns(140);
 	uint8_t data = (DB_MASK << PIN_DB0) & GPIO_ReadPort(DATA_PORT);
-	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
 	int ac = data & 0x7F;
 	return data & (1 << 7);
 }
@@ -192,7 +187,11 @@ void wait_ready(){
 	// set transceiver direction to read
 	GPIO_WritePin(TRAN_PORT, PIN_DIR, 0);
 	
+	GPIO_WritePin(CTRL_PORT, PIN_RS, 1);			// RS = 0
+	GPIO_WritePin(CTRL_PORT, PIN_RW, 0);			// Read; RW = 1
+	GPIO_WritePin(CTRL_PORT, PIN_E, 0);				// E = 1
 	while(isBusy());
+	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
 	
 	// set transceiver direction to write
 	GPIO_WritePin(TRAN_PORT, PIN_DIR, 1);
