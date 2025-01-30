@@ -29,6 +29,11 @@ void LCD_Init(){
 	ClearDisplay();
 }
 
+void WriteGraphic(uint8_t row, uint8_t col, uint8_t byte){
+	SetGDRAMAddr(row, 0);
+	write_data(byte);
+}
+
 void write_command(uint8_t cmd){
 	
 	GPIO_WritePin(CTRL_PORT, PIN_RS, 1);			// RS = 0
@@ -118,6 +123,21 @@ void FillWith(uint8_t val)
 	for (uint8_t page = 0x80; page<0xA1; page++)
 	{
 		FillRowWith(page, val);
+	}
+}
+
+void FillHalf(uint8_t val, uint8_t mode){
+	for (uint8_t row = 0; row < 32; row++)
+	{
+		SetGDRAMAddr(row, 0);
+		for (int x = 0;x<9;x++)
+		{
+			write_data(mode? 0 : val);
+		}
+		for (int x = 0;x<9;x++)
+		{
+			write_data(mode? val : 0);
+		}
 	}
 }
 

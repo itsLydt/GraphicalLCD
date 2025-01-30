@@ -17,7 +17,14 @@
 //init LCD
 void LCD_Init();
 
+/*	Graphic display has 144 x 32 pixels, aka 32 rows of 8 bytes.
+	This function writes 1 byte (8 pixels) at the indicated row and column.
+	Note that this will increment the cursor position
+*/
+void WriteGraphic(uint8_t row, uint8_t col, uint8_t byte);
+
 void FillWith(uint8_t val);
+void FillHalf(uint8_t val, uint8_t mode);
 
 /* Fill DDRAM with "20H" and set DDRAM address counter (AC) to "00H" */
 void ClearDisplay();
@@ -29,8 +36,12 @@ void SetEntryMode(_Bool cursor_increment, _Bool shift_display);
 void SetDisplayMode(_Bool enable_display, _Bool enable_cursor, _Bool enable_blink);
 
 void SetGDRAMAddr(uint8_t row, uint8_t col);
-/* not clear what this does */
 void SetDDRAMAddr(uint8_t addr);
+void SetCGRAMAddr(uint8_t addr);
+
+
+
+void write_command(uint8_t cmd);
 void write_data(uint8_t data);
 void Smile();
 void Aww();
