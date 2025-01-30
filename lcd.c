@@ -192,25 +192,13 @@ _Bool isBusy(){
 void wait_ready(){
 	// set parallel pins to input
 	GPIO_SetPortDirection(DATA_PORT, DB_MASK << PIN_DB0, GPIO_IN);
-	
-	// disable transceiver
-	GPIO_WritePin(TRAN_PORT, PIN_ENABLE, 0); 
-	
 	// set transceiver direction to read
 	GPIO_WritePin(TRAN_PORT, PIN_DIR, 0);
-
-	// enable transceiver
-	GPIO_WritePin(TRAN_PORT, PIN_ENABLE, 1);
 	
 	while(isBusy());
 	
-	// set data bus back to output, etc
-	// disable transceiver
-	GPIO_WritePin(TRAN_PORT, PIN_ENABLE, 0);
 	// set transceiver direction to write
 	GPIO_WritePin(TRAN_PORT, PIN_DIR, 1);
-	// enable transceiver
-	GPIO_WritePin(TRAN_PORT, PIN_ENABLE, 1);
 	// set parallel pins to output
 	GPIO_SetPortDirection(DATA_PORT, DB_MASK << PIN_DB0, GPIO_OUT);
 }
