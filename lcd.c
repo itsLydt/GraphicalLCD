@@ -119,7 +119,6 @@ void FillRowWith(uint8_t row, uint8_t val){
 
 void FillWith(uint8_t val)
 {
-	ReturnHome();
 	for (uint8_t page = 0x80; page<0xA1; page++)
 	{
 		FillRowWith(page, val);
