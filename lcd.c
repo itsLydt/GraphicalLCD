@@ -17,9 +17,9 @@ void wait_ready();
 
 void LCD_Init(){
 	// configure GPIO pins that will be used to control the display
-	GPIO_SetPortDirection(DATA_PORT, DB_MASK << PIN_DB0, GPIO_OUT);	
-	struct GPIO_PinConfig_t t = { .enableInputBuffer = 1 }; 
+	struct GPIO_PinConfig_t t = { .enableInputBuffer = 1, .enablePull = 1 }; 
 	GPIO_ConfigurePort(DATA_PORT, DB_MASK << PIN_DB0, GPIO_OUT, &t);
+	
 	GPIO_SetPortDirection(CTRL_PORT, CTRL_MASK, GPIO_OUT);
 	
 	write_command(0x38);        //Function Set: 8-bit mode, basic instruction
