@@ -37,7 +37,7 @@ void write_command(uint8_t cmd){
 	GPIO_WriteValue(DATA_PORT, DB_MASK << PIN_DB0, cmd);	// write command data bus
 	
 	// hold data / E signal for 150ns
-	delay_ns(140);
+	//delay_us(1);
 	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
 	wait_ready();
 }
@@ -50,7 +50,7 @@ void write_data(uint8_t data){
 	GPIO_WriteValue(DATA_PORT, DB_MASK << PIN_DB0, data);	// write command data bus
 	
 	// hold data / E signal for 150ns
-	delay_ns(140);
+	//delay_us(1);
 	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
 	delay_ns(20);
 }
