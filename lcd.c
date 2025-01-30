@@ -181,10 +181,7 @@ _Bool isBusy(){
 	delay_ns(140);
 	uint8_t data = (DB_MASK << PIN_DB0) & GPIO_ReadPort(DATA_PORT);
 	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
-	volatile int ac = data & 0x7F;
-	if(data > 0){
-		volatile int t = 5;
-	}
+	int ac = data & 0x7F;
 	return data & (1 << 7);
 }
 
