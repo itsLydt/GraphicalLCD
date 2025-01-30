@@ -57,7 +57,7 @@ void write_data(uint8_t data){
 	// hold data / E signal for 150ns
 	//delay_us(1);
 	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
-	delay_ns(20);
+	wait_ready();
 }
 
 void ClearDisplay() {
