@@ -184,6 +184,7 @@ void wait_ready(){
 	// set parallel pins to input
 	GPIO_SetPortDirection(DATA_PORT, DB_MASK << PIN_DB0, GPIO_IN);
 	GPIO_WritePort(DATA_PORT, DB_MASK << PIN_DB0, 1);
+
 	// set transceiver direction to read
 	GPIO_WritePin(TRAN_PORT, PIN_DIR, 0);
 	
