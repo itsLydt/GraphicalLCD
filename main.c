@@ -16,9 +16,6 @@ void TRAN_Init();
 
 int main(void)
 {
-	// wait for LCD to power on 
-	delay_ms(5000);
-	
 	TRAN_Init();
 	LCD_Init();
 
