@@ -200,10 +200,7 @@ void wait_ready(){
 }
 
 void DrawChar(char c){
-	write_command(0x34); // set extended function mode on + GD off
-	write_command(0x02);	// set SR = 0
-	write_command(0x30); // change to basic instruction mode
-	SetDisplayMode(0, 1, 1);
-	SetCGRAMAddr(0);	
-	write_data(c);
+	uint16_t char_code = c + 0xA260;
+	write_data((char_code >> 8) & 0xFF);
+	write_data(char_code & 0xFF);
 }
