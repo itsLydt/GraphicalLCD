@@ -26,7 +26,7 @@ enum InterfaceMode {
 	/*,
 	SPI	
 	*/
-} comm_mode;
+} comm_interface;
 
 enum BasicInstructionSet {
 	DISPLAY_CLEAR			= 0x01,
@@ -55,9 +55,7 @@ void LCD_Init(){
 	
 	GPIO_SetPortDirection(CTRL_PORT, CTRL_MASK, GPIO_OUT);
 	
-	write_command(0x38);        //Function Set: 8-bit mode, basic instruction
-	comm_mode = PARALLEL8;
-	instr_set = BASIC;
+	function_set(PARALLEL8, BASIC);	// 8-bit mode, basic instruction
 	SetDisplayMode(1, 0, 0);	// Display on, cursor off, blink off
 	SetEntryMode(1, 0);			// Cursor increment, no shift
 	ReturnHome();
@@ -235,8 +233,17 @@ void wait_ready(){
 	GPIO_SetPortDirection(DATA_PORT, DB_MASK << PIN_DB0, GPIO_OUT);
 }
 
-void function_set(InterfaceMode interface, InstructionMode mode){
-	uint8_t cmd = 0x32;
+void function_set(enum InterfaceMode interface, enum InstructionMode mode){
+	uint8_t cmd = FUNCTION_SET;
+	if(interface == PARALLEL8){
+		cmd |= (1 << 4);
+	}
+	if(mode == EXTENDED){
+		cmd |= (1 << 2);
+	}
+	write_command(cmd);
+	instr_set = mode;
+	comm_interface = interface;
 }
 
 void DrawChar(char c){
