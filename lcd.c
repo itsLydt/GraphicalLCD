@@ -22,8 +22,10 @@ enum InstructionMode {
 
 enum InterfaceMode {
 	PARALLEL8,
-	PARALLEL4,
+	PARALLEL4 
+	/*,
 	SPI	
+	*/
 } comm_mode;
 
 void LCD_Init(){
@@ -212,6 +214,8 @@ void wait_ready(){
 	// set parallel pins to output
 	GPIO_SetPortDirection(DATA_PORT, DB_MASK << PIN_DB0, GPIO_OUT);
 }
+
+void function_set(InterfaceMode mode)
 
 void DrawChar(char c){
 	uint16_t char_code = c + 0xA260;
