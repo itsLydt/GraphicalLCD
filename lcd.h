@@ -23,9 +23,6 @@ void LCD_Init();
 */
 void WriteGraphic(uint8_t row, uint8_t col, uint8_t byte);
 
-void FillWith(uint8_t val);
-void FillHalf(uint8_t val, uint8_t mode);
-
 /* Fill DDRAM with "20H" and set DDRAM address counter (AC) to "00H" */
 void ClearDisplay();
 /* Set AC to "00H" and put cursor at origin. Contents of DDRAM are unchanged. */
@@ -39,12 +36,14 @@ void SetGDRAMAddr(uint8_t row, uint8_t col);
 void SetDDRAMAddr(uint8_t addr);
 void SetCGRAMAddr(uint8_t addr);
 
-
-
 void write_command(uint8_t cmd);
 void write_data(uint8_t data);
 void Smile();
 void Aww();
+
+void FillWith(uint8_t val);
+void FillHalf(uint8_t val, uint8_t mode);
+
 
 void DrawChar(char c);
 

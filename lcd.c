@@ -47,32 +47,6 @@ void WriteGraphic(uint8_t row, uint8_t col, uint8_t byte){
 	write_data(byte);
 }
 
-void write_command(uint8_t cmd){
-	
-	GPIO_WritePin(CTRL_PORT, PIN_RS, 1);			// RS = 0
-	GPIO_WritePin(CTRL_PORT, PIN_RW, 1);			// Write; RW = 0
-	GPIO_WritePin(CTRL_PORT, PIN_E, 0);				// E = 1
-	GPIO_WriteValue(DATA_PORT, DB_MASK << PIN_DB0, cmd);	// write command data bus
-	
-	// hold data / E signal for 150ns
-	//delay_us(1);
-	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
-	wait_ready();
-}
-
-void write_data(uint8_t data){
-	
-	GPIO_WritePin(CTRL_PORT, PIN_RS, 0);			// RS = 1
-	GPIO_WritePin(CTRL_PORT, PIN_RW, 1);			// Write; RW = 0
-	GPIO_WritePin(CTRL_PORT, PIN_E, 0);				// E = 1
-	GPIO_WriteValue(DATA_PORT, DB_MASK << PIN_DB0, data);	// write command data bus
-	
-	// hold data / E signal for 150ns
-	//delay_us(1);
-	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
-	wait_ready();
-}
-
 void ClearDisplay() {
 	write_command(0x30);
 	write_command(0x01);
@@ -97,6 +71,32 @@ void SetDisplayMode(_Bool enable_display, _Bool enable_cursor, _Bool enable_blin
 	cmd |= (enable_cursor << 1);
 	cmd |= (enable_blink);
 	write_command(cmd);
+}
+
+void write_command(uint8_t cmd){
+	
+	GPIO_WritePin(CTRL_PORT, PIN_RS, 1);			// RS = 0
+	GPIO_WritePin(CTRL_PORT, PIN_RW, 1);			// Write; RW = 0
+	GPIO_WritePin(CTRL_PORT, PIN_E, 0);				// E = 1
+	GPIO_WriteValue(DATA_PORT, DB_MASK << PIN_DB0, cmd);	// write command data bus
+	
+	// hold data / E signal for 150ns
+	//delay_us(1);
+	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
+	wait_ready();
+}
+
+void write_data(uint8_t data){
+	
+	GPIO_WritePin(CTRL_PORT, PIN_RS, 0);			// RS = 1
+	GPIO_WritePin(CTRL_PORT, PIN_RW, 1);			// Write; RW = 0
+	GPIO_WritePin(CTRL_PORT, PIN_E, 0);				// E = 1
+	GPIO_WriteValue(DATA_PORT, DB_MASK << PIN_DB0, data);	// write command data bus
+	
+	// hold data / E signal for 150ns
+	//delay_us(1);
+	GPIO_WritePin(CTRL_PORT, PIN_E, 1);				// E = 0
+	wait_ready();
 }
 
 void SetCGRAMAddr(uint8_t addr){
