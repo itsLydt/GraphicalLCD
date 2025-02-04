@@ -14,6 +14,7 @@ const uint8_t DB_MASK = 0xFF;
 
 void write_command(uint8_t cmd);
 void wait_ready();
+void function_set(enum InterfaceMode interface, enum InstructionMode mode);
 
 enum InstructionMode {
 	BASIC,
@@ -33,19 +34,19 @@ enum BasicInstructionSet {
 	RETURN_HOME				= 0x02,
 	ENTRY_MODE_SET			= 0x04,	
 	DISPLAY_CONTROL			= 0x08,
-	CURSOR_SHIFT_CONTROL	= 0x16,
-	FUNCTION_SET			= 0x32,
-	SET_CGRAM_ADDR			= 0x64,
-	SET_DDRAM_ADDR			= 0x128
+	CURSOR_SHIFT_CONTROL	= 0x10,
+	FUNCTION_SET			= 0x20,
+	SET_CGRAM_ADDR			= 0x40,
+	SET_DDRAM_ADDR			= 0x80
 };
 
 enum ExtendedInstructionSet {
 	STANDBY					= 0x01,
 	SCROLL_RAM_SELECT		= 0x02,
 	REVERSE_LINE			= 0x04,
-	EXTENDED_FUNCTION_SET	= 0x08,
-	SET_SCROLL_ADDR			= 0x16,
-	SET_GDRAM_ADDR			= 0x32
+	EXTENDED_FUNCTION_SET	= 0x20,
+	SET_SCROLL_ADDR			= 0x40,
+	SET_GDRAM_ADDR			= 0x80
 };
 
 void LCD_Init(){
@@ -86,7 +87,10 @@ void SetEntryMode(_Bool cursor_increment, _Bool shift_display){
 
 /* Set Display Mode: display on/off, cursor on/off, character blink on/off */
 void SetDisplayMode(_Bool enable_display, _Bool enable_cursor, _Bool enable_blink){
-	uint8_t cmd = 0x08;
+	if(instr_set == EXTENDED){
+		ex
+	}
+	uint8_t cmd = DISPLAY_CONTROL;
 	cmd |= (enable_display << 2);
 	cmd |= (enable_cursor << 1);
 	cmd |= (enable_blink);
