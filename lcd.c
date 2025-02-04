@@ -28,6 +28,26 @@ enum InterfaceMode {
 	*/
 } comm_mode;
 
+enum BasicInstructionSet {
+	DISPLAY_CLEAR			= 0x01,
+	RETURN_HOME				= 0x02,
+	ENTRY_MODE_SET			= 0x04,	
+	DISPLAY_CONTROL			= 0x08,
+	CURSOR_SHIFT_CONTROL	= 0x16,
+	FUNCTION_SET			= 0x32,
+	SET_CGRAM_ADDR			= 0x64,
+	SET_DDRAM_ADDR			= 0x128
+};
+
+enum ExtendedInstructionSet {
+	STANDBY					= 0x01,
+	SCROLL_RAM_SELECT		= 0x02,
+	REVERSE_LINE			= 0x04,
+	EXTENDED_FUNCTION_SET	= 0x08,
+	SET_SCROLL_ADDR			= 0x16,
+	SET_GDRAM_ADDR			= 0x32
+};
+
 void LCD_Init(){
 	// configure GPIO pins that will be used to control the display
 	struct GPIO_PinConfig_t t = { .enableInputBuffer = 1, .enablePull = 1 }; 
@@ -215,7 +235,9 @@ void wait_ready(){
 	GPIO_SetPortDirection(DATA_PORT, DB_MASK << PIN_DB0, GPIO_OUT);
 }
 
-void function_set(InterfaceMode mode)
+void function_set(InterfaceMode interface, InstructionMode mode){
+	uint8_t cmd = 0x32;
+}
 
 void DrawChar(char c){
 	uint16_t char_code = c + 0xA260;
