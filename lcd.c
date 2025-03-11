@@ -94,7 +94,11 @@ void ReturnHome(){
 
 void SetEntryMode(_Bool cursor_increment, _Bool shift_display){
 	// basic mode
-	uint8_t cmd = 0x04;
+	if(instr_set == EXTENDED){
+		// set LCD to basic instruction mode before sending
+		ext_function_set(comm_interface, BASIC, graphic_display_on);
+	}
+	uint8_t cmd = ENTRY_MODE_SET;
 	cmd |= (cursor_increment << 1);
 	cmd |= (shift_display);
 	write_command(cmd);
@@ -110,6 +114,19 @@ void SetDisplayMode(_Bool enable_display, _Bool enable_cursor, _Bool enable_blin
 	cmd |= (enable_display << 2);
 	cmd |= (enable_cursor << 1);
 	cmd |= (enable_blink);
+	write_command(cmd);
+}
+
+/* TBT not really sure how this differs from SetEntryMode. Scroll = 1: display will shift,  = 0: cursor will shift. 
+Other param refers to shift direction */
+void SetCursorDisplayShift(_Bool scroll, _Bool right){
+	// basic mode
+	if(instr_set == EXTENDED){
+		ext_function_set(comm_interface, BASIC, graphic_display_on);
+	}
+	uint8_t cmd = CURSOR_SHIFT_CONTROL;
+	cmd |= (scroll << 3);
+	cmd |= (right << 2);
 	write_command(cmd);
 }
 
