@@ -9,6 +9,12 @@
 #include "config.h"
 #include "delay.h"
 
+const int LCD_GDROWS = 32;
+const int LCD_GDCOLS = 18;
+
+const int LCD_CHARROWS = 2;
+const int LCD_CHARCOLS = 18;
+
 const uint8_t DB_MASK = 0xFF;
 #define CTRL_MASK ((1 << PIN_RS) | (1 << PIN_RW) | (1 << PIN_E))
 
@@ -130,6 +136,10 @@ void SetCursorDisplayShift(_Bool scroll, _Bool right){
 	write_command(cmd);
 }
 
+void EnableGraphicalDisplay(_Bool enable){
+	ext_function_set(comm_interface, EXTENDED, enable);
+}
+
 void write_command(uint8_t cmd){
 	
 	GPIO_WritePin(CTRL_PORT, PIN_RS, 1);			// RS = 0
@@ -195,7 +205,7 @@ void SetDDRAMAddr(uint8_t addr){
 
 void FillRowWith(uint8_t row, uint8_t val){
 	SetGDRAMAddr(row, 0);
-	for (int x = 0;x<18;x++)
+	for (int x = 0;x<LCD_GDCOLS; x++)
 	{
 		write_data(val);
 	}
@@ -203,21 +213,21 @@ void FillRowWith(uint8_t row, uint8_t val){
 
 void FillWith(uint8_t val)
 {
-	for (uint8_t page = 0; page < 32; page++)
+	for (uint8_t page = 0; page < LCD_GDROWS; page++)
 	{
 		FillRowWith(page, val);
 	}
 }
 
 void FillHalf(uint8_t val, uint8_t mode){
-	for (uint8_t row = 0; row < 32; row++)
+	for (uint8_t row = 0; row < LCD_GDROWS; row++)
 	{
 		SetGDRAMAddr(row, 0);
-		for (int x = 0;x<9;x++)
+		for (int x = 0;x<LCD_GDCOLS/2;x++)
 		{
 			write_data(mode? 0 : val);
 		}
-		for (int x = 0;x<9;x++)
+		for (int x = LCD_GDCOLS/2;x<LCD_GDCOLS;x++)
 		{
 			write_data(mode? val : 0);
 		}
@@ -292,6 +302,9 @@ void function_set(enum InterfaceMode interface, enum InstructionMode mode){
 	if(mode == EXTENDED){
 		cmd |= (1 << 2);
 	}
+	if(graphic_display_on){
+		cmd |= (1 << 1); // keep the display on
+	}
 	write_command(cmd);
 	instr_set = mode;
 	comm_interface = interface;
@@ -316,8 +329,7 @@ void ext_function_set(enum InterfaceMode interface, enum InstructionMode mode, _
 
 
 void DrawChar(char c){
-	function_set(comm_interface, EXTENDED);
-	ext_function_set(comm_interface, EXTENDED, true);
+	ext_function_set(comm_interface, EXTENDED, 1);
 	uint16_t char_code = c + 0xA260;
 	write_data((char_code >> 8) & 0xFF);
 	write_data(char_code & 0xFF);

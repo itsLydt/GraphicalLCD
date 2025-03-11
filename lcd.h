@@ -14,10 +14,17 @@
 #include "ATSAMD21/drivers/gpio/gpio.h"
 #include "delay.h"
 
+
+const int LCD_GDROWS;
+const int LCD_GDCOLS;
+
+const int LCD_CHARROWS;
+const int LCD_CHARCOLS;
+
 //init LCD
 void LCD_Init();
 
-/*	Graphic display has 144 x 32 pixels, aka 32 rows of 8 bytes.
+/*	Graphic display has 144 x 32 pixels, aka 32 rows of 18 bytes.
 	This function writes 1 byte (8 pixels) at the indicated row and column.
 	Note that this will increment the cursor position
 */
@@ -33,6 +40,9 @@ void SetEntryMode(_Bool cursor_increment, _Bool shift_display);
 void SetDisplayMode(_Bool enable_display, _Bool enable_cursor, _Bool enable_blink);
 /* Set Cursor/Display Shift */
 void SetCursorDisplayShift(_Bool scroll, _Bool right);
+
+/* Turn graphical display (only) on or off */
+void EnableGraphicalDisplay(_Bool enable);
 
 void SetGDRAMAddr(uint8_t row, uint8_t col);
 void SetDDRAMAddr(uint8_t addr);
