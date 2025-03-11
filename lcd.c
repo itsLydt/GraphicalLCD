@@ -77,15 +77,19 @@ void WriteGraphic(uint8_t row, uint8_t col, uint8_t byte){
 void ClearDisplay() {
 	// basic mode
 	if(instr_set == EXTENDED){
+		// set LCD to basic instruction mode before sending
 		ext_function_set(comm_interface, BASIC, graphic_display_on);	
 	}
-	write_command(0x01);
+	write_command(DISPLAY_CLEAR);
 }
 
 void ReturnHome(){
 	// basic mode
-	write_command(0x30);
-	write_command(0x02);
+	if(instr_set == EXTENDED){
+		// set LCD to basic instruction mode before sending
+		ext_function_set(comm_interface, BASIC, graphic_display_on);	
+	}
+	write_command(RETURN_HOME);
 }
 
 void SetEntryMode(_Bool cursor_increment, _Bool shift_display){
@@ -145,6 +149,8 @@ void SetCGRAMAddr(uint8_t addr){
 void SetGDRAMAddr(uint8_t row, uint8_t col){
 	//extended command
 	write_command(0x3E);
+	graphic_display_on = true;
+	instr_set = EXTENDED;
 	row |= (0x01 << 7);
 	row &= 0xBF;
 	write_command(row);
@@ -284,6 +290,8 @@ void ext_function_set(enum InterfaceMode interface, enum InstructionMode mode, _
 
 
 void DrawChar(char c){
+	function_set(comm_interface, EXTENDED);
+	ext_function_set(comm_interface, EXTENDED, true);
 	uint16_t char_code = c + 0xA260;
 	write_data((char_code >> 8) & 0xFF);
 	write_data(char_code & 0xFF);
