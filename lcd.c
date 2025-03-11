@@ -158,6 +158,9 @@ void write_data(uint8_t data){
 
 void SetCGRAMAddr(uint8_t addr){
 	//basic command
+	if(instr_set == EXTENDED){
+		ext_function_set(comm_interface, BASIC, graphic_display_on);
+	}
 	addr |= (0x01 << 6);
 	addr &= (0x7F);
 	write_command(addr);
@@ -165,9 +168,12 @@ void SetCGRAMAddr(uint8_t addr){
 
 void SetGDRAMAddr(uint8_t row, uint8_t col){
 	//extended command
-	write_command(0x3E);
-	graphic_display_on = true;
-	instr_set = EXTENDED;
+	if(instr_set == BASIC){
+		function_set(comm_interface, EXTENDED);
+	}
+	if(!graphic_display_on){
+		ext_function_set(comm_interface, EXTENDED, 1);
+	}
 	row |= (0x01 << 7);
 	row &= 0xBF;
 	write_command(row);
