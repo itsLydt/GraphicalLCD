@@ -14,12 +14,13 @@ const uint8_t DB_MASK = 0xFF;
 
 void write_command(uint8_t cmd);
 void wait_ready();
-void function_set(enum InterfaceMode interface, enum InstructionMode mode);
+
 
 enum InstructionMode {
 	BASIC,
 	EXTENDED
 } instr_set;
+
 
 enum InterfaceMode {
 	PARALLEL8,
@@ -28,6 +29,11 @@ enum InterfaceMode {
 	SPI	
 	*/
 } comm_interface;
+
+_Bool graphic_display_on = 0;
+
+void function_set(enum InterfaceMode interface, enum InstructionMode mode);
+void ext_function_set(enum InterfaceMode interface, enum InstructionMode mode, _Bool enable_graphic_display);
 
 enum BasicInstructionSet {
 	DISPLAY_CLEAR			= 0x01,
@@ -69,16 +75,21 @@ void WriteGraphic(uint8_t row, uint8_t col, uint8_t byte){
 }
 
 void ClearDisplay() {
-	write_command(0x30);
+	// basic mode
+	if(instr_set == EXTENDED){
+		ext_function_set(comm_interface, BASIC, graphic_display_on);	
+	}
 	write_command(0x01);
 }
 
 void ReturnHome(){
+	// basic mode
 	write_command(0x30);
 	write_command(0x02);
 }
 
 void SetEntryMode(_Bool cursor_increment, _Bool shift_display){
+	// basic mode
 	uint8_t cmd = 0x04;
 	cmd |= (cursor_increment << 1);
 	cmd |= (shift_display);
@@ -87,8 +98,9 @@ void SetEntryMode(_Bool cursor_increment, _Bool shift_display){
 
 /* Set Display Mode: display on/off, cursor on/off, character blink on/off */
 void SetDisplayMode(_Bool enable_display, _Bool enable_cursor, _Bool enable_blink){
+	// basic mode
 	if(instr_set == EXTENDED){
-		ex
+		ext_function_set(comm_interface, BASIC, graphic_display_on);
 	}
 	uint8_t cmd = DISPLAY_CONTROL;
 	cmd |= (enable_display << 2);
@@ -124,12 +136,14 @@ void write_data(uint8_t data){
 }
 
 void SetCGRAMAddr(uint8_t addr){
+	//basic command
 	addr |= (0x01 << 6);
 	addr &= (0x7F);
 	write_command(addr);
 }
 
 void SetGDRAMAddr(uint8_t row, uint8_t col){
+	//extended command
 	write_command(0x3E);
 	row |= (0x01 << 7);
 	row &= 0xBF;
@@ -141,6 +155,7 @@ void SetGDRAMAddr(uint8_t row, uint8_t col){
 
 
 void SetDDRAMAddr(uint8_t addr){
+	//basic command
 	addr |= (0x01 << 7);
 	addr &= (0xBF);
 	write_command(addr);
@@ -249,6 +264,24 @@ void function_set(enum InterfaceMode interface, enum InstructionMode mode){
 	instr_set = mode;
 	comm_interface = interface;
 }
+
+void ext_function_set(enum InterfaceMode interface, enum InstructionMode mode, _Bool enable_graphic_display){
+	uint8_t cmd = EXTENDED_FUNCTION_SET;
+	if(interface == PARALLEL8){
+		cmd |= (1 << 4);
+	}
+	if(mode == EXTENDED){
+		cmd |= (1 << 2);
+	}
+	if(enable_graphic_display){
+		cmd |= (1 << 1);
+	}
+	write_command(cmd);
+	graphic_display_on = enable_graphic_display;
+	instr_set = mode;
+	comm_interface = interface;
+};
+
 
 void DrawChar(char c){
 	uint16_t char_code = c + 0xA260;
