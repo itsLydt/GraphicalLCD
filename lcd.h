@@ -31,6 +31,8 @@ void ReturnHome();
 void SetEntryMode(_Bool cursor_increment, _Bool shift_display);
 /* Set Display Mode: display on/off, cursor on/off, character blink on/off */
 void SetDisplayMode(_Bool enable_display, _Bool enable_cursor, _Bool enable_blink);
+/* Set Cursor/Display Shift */
+void SetCursorDisplayShift(_Bool scroll, _Bool right);
 
 void SetGDRAMAddr(uint8_t row, uint8_t col);
 void SetDDRAMAddr(uint8_t addr);
