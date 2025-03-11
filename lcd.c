@@ -161,7 +161,7 @@ void SetCGRAMAddr(uint8_t addr){
 	if(instr_set == EXTENDED){
 		ext_function_set(comm_interface, BASIC, graphic_display_on);
 	}
-	addr |= (0x01 << 6);
+	addr |= SET_CGRAM_ADDR;
 	addr &= (0x7F);
 	write_command(addr);
 }
@@ -174,10 +174,10 @@ void SetGDRAMAddr(uint8_t row, uint8_t col){
 	if(!graphic_display_on){
 		ext_function_set(comm_interface, EXTENDED, 1);
 	}
-	row |= (0x01 << 7);
+	row |= SET_GDRAM_ADDR;
 	row &= 0xBF;
 	write_command(row);
-	col |= (0x01 << 7);
+	col |= SET_GDRAM_ADDR;
 	col &= (0x8F);
 	write_command(col);
 }
@@ -185,7 +185,10 @@ void SetGDRAMAddr(uint8_t row, uint8_t col){
 
 void SetDDRAMAddr(uint8_t addr){
 	//basic command
-	addr |= (0x01 << 7);
+	if(instr_set == EXTENDED){
+		ext_function_set(comm_interface, BASIC, graphic_display_on);
+	}
+	addr |= SET_DDRAM_ADDR;
 	addr &= (0xBF);
 	write_command(addr);
 }
